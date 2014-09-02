@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_gosustream_lol_domain_Game" object="${game}" path="/games" z="33OgxZMU1D6dRhHKr2O4Szt18B0=">
+        <field:display field="gameId" id="s_com_gosustream_lol_domain_Game_gameId" object="${game}" z="IErEBHaoGdnm3kYd+NVqqEO3g3g="/>
+        <field:display date="true" dateTimePattern="${game_starttime_date_format}" field="startTime" id="s_com_gosustream_lol_domain_Game_startTime" object="${game}" z="emDKI6zQjg7CjKY5aKxZeWMzpAU="/>
+        <field:display date="true" dateTimePattern="${game_endtime_date_format}" field="endTime" id="s_com_gosustream_lol_domain_Game_endTime" object="${game}" z="8NxOt3X+yjdSoSTGJ3xgrXVbDFM="/>
+        <field:display field="priority" id="s_com_gosustream_lol_domain_Game_priority" object="${game}" z="8GBl9xVW991zVPEY8YJzcGpJqr8="/>
+    </page:show>
+</div>

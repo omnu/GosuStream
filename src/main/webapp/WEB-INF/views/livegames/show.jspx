@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_gosustream_lol_domain_LiveGame" object="${livegame}" path="/livegames" z="czeB9/NRRxuA7r5dhHUNSpyLb30=">
+        <field:display field="gameId" id="s_com_gosustream_lol_domain_LiveGame_gameId" object="${livegame}" z="BAYV6ND9jSDn2NfhOO2nMkX92yI="/>
+        <field:display field="observerKey" id="s_com_gosustream_lol_domain_LiveGame_observerKey" object="${livegame}" z="idSP9aIATi0/7uRZwbkcfP6z31s="/>
+        <field:display date="true" dateTimePattern="${liveGame_starttime_date_format}" field="startTime" id="s_com_gosustream_lol_domain_LiveGame_startTime" object="${livegame}" z="2ZEzjtr65VMgmtLmdo0eS31aa54="/>
+        <field:display field="priority" id="s_com_gosustream_lol_domain_LiveGame_priority" object="${livegame}" z="TETX1WxCmexmxrY3ucnqxr5Vlvo="/>
+        <field:display field="broadcast" id="s_com_gosustream_lol_domain_LiveGame_broadcast" object="${livegame}" z="V33ebk+7rd5lTHOsMH7vXWG75+o="/>
+    </page:show>
+</div>

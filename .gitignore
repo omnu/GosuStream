@@ -1,0 +1,14 @@
+.classpath
+.project
+target/
+.settings/
+log.roo
+logs/
+.DS_Store
+
+# keeps getting recreated by roo
+# remove once roo is gone
+src/main/webapp/images/delete.png
+src/main/webapp/images/show.png
+src/main/webapp/images/update.png
+/bin

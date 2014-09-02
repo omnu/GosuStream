@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_gosustream_lol_domain_Game" modelAttribute="game" path="/games" versionField="Version" z="6eFzSiUQu1MB0p3exJXgc9FR9jA=">
+        <field:input field="gameId" id="c_com_gosustream_lol_domain_Game_gameId" required="true" z="MvB+y8Cs0zAr5t+60jwhHaJwVKU="/>
+        <field:datetime dateTimePattern="${game_starttime_date_format}" field="startTime" id="c_com_gosustream_lol_domain_Game_startTime" required="true" z="sfLFVWGbehkbd5bj1TCFj4CFPHk="/>
+        <field:datetime dateTimePattern="${game_endtime_date_format}" field="endTime" id="c_com_gosustream_lol_domain_Game_endTime" required="true" z="xaCU8jvrfoxe/ewjsVoYJgFYFkA="/>
+        <field:input field="priority" id="c_com_gosustream_lol_domain_Game_priority" z="UsgWT1fXFVK+UiW6gAIaci1S7uk="/>
+    </form:update>
+</div>

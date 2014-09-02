@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_gosustream_lol_domain_LiveGame" items="${livegames}" z="Oojgv1c/1aYsbnSGrCYQIQ8B3Ao=">
+        <table:table data="${livegames}" id="l_com_gosustream_lol_domain_LiveGame" path="/livegames" z="4u3CVMxEZByKNYs5eNaLTEiUQY4=">
+            <table:column id="c_com_gosustream_lol_domain_LiveGame_gameId" property="gameId" z="NyrR/UCdV1JlXk1biON5y+8xawk="/>
+            <table:column id="c_com_gosustream_lol_domain_LiveGame_observerKey" property="observerKey" z="GRfczc5Gt/zypCMKz7ZJDz9q2UE="/>
+            <table:column date="true" dateTimePattern="${liveGame_starttime_date_format}" id="c_com_gosustream_lol_domain_LiveGame_startTime" property="startTime" z="FDKgzeNugOs1ITzwRTFsoRgtCCI="/>
+            <table:column id="c_com_gosustream_lol_domain_LiveGame_priority" property="priority" z="sSSY6W8aXClDjcuWc68ZvbIDD0Q="/>
+            <table:column id="c_com_gosustream_lol_domain_LiveGame_broadcast" property="broadcast" z="J3Kp5R88NYquUc89heGfc43hT1g="/>
+        </table:table>
+    </page:list>
+</div>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_gosustream_lol_domain_Game" items="${games}" z="a2JdtrKt+FmsumYkV75cw0HAD9A=">
+        <table:table data="${games}" id="l_com_gosustream_lol_domain_Game" path="/games" z="ou3dpXq2iL9m3WlVCzbGIh28itM=">
+            <table:column id="c_com_gosustream_lol_domain_Game_gameId" property="gameId" z="rgJkQeXCwY1kLWAOZAwWnSl7v4U="/>
+            <table:column date="true" dateTimePattern="${game_starttime_date_format}" id="c_com_gosustream_lol_domain_Game_startTime" property="startTime" z="pNMEUoSXFbwZxZysrfwqYuNwdgA="/>
+            <table:column date="true" dateTimePattern="${game_endtime_date_format}" id="c_com_gosustream_lol_domain_Game_endTime" property="endTime" z="IgiO9GPc6ZYwkuvZW2mLXFYV5pw="/>
+            <table:column id="c_com_gosustream_lol_domain_Game_priority" property="priority" z="aKwr+HrUoaebt0GY+MmVue5CG1o="/>
+        </table:table>
+    </page:list>
+</div>

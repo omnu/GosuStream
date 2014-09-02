@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:create id="fc_com_gosustream_lol_domain_LiveGame" modelAttribute="liveGame" path="/livegames" render="${empty dependencies}" z="Kadd9vhGrDMQkb2bI4FNx5xCu44=">
+        <field:input field="gameId" id="c_com_gosustream_lol_domain_LiveGame_gameId" required="true" z="z50SbWDTVAtQsRup66uhVJFwBqg="/>
+        <field:input field="observerKey" id="c_com_gosustream_lol_domain_LiveGame_observerKey" required="true" z="1rlb74u3Er4AROb7fplWg8nMCxU="/>
+        <field:datetime dateTimePattern="${liveGame_starttime_date_format}" field="startTime" id="c_com_gosustream_lol_domain_LiveGame_startTime" required="true" z="Xj8v3bV4RwgpED54Go+txiDydbI="/>
+        <field:input field="priority" id="c_com_gosustream_lol_domain_LiveGame_priority" z="SaA1k4/eFFFMZblyXPbYdlHLrrI="/>
+        <field:checkbox field="broadcast" id="c_com_gosustream_lol_domain_LiveGame_broadcast" z="amXmHEsp47QMFazCTSQM9kX9K9c="/>
+    </form:create>
+    <form:dependency dependencies="${dependencies}" id="d_com_gosustream_lol_domain_LiveGame" render="${not empty dependencies}" z="3+hm4ljy7tg+SLqKnClnYcJ+zrU="/>
+</div>
