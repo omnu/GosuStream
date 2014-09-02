@@ -33,7 +33,7 @@ public class LiveGameController {
             throw new Exception();
         }
         
-     // These code snippets use an open-source library. http://unirest.io/java
+        // These code snippets use an open-source library. http://unirest.io/java
         HttpResponse<JsonNode> response = Unirest.get("https://community-league-of-legends.p.mashape.com/api/v1.0/" + region + "/summoner/retrieveInProgressSpectatorGameInfo/"+ alias)
         .header("X-Mashape-Key", "vZltgavJCxmshMmz2evwZblTuuDep1AA7FijsneomYUZASc9Uu").asJson();
         JSONObject result = response.getBody().getObject();
@@ -42,10 +42,12 @@ public class LiveGameController {
         String observerKey = playerCredentials.getString("observerEncryptionKey");
 
         // Check if current game already exists inside live games table and persist if not
-        LiveGame liveGame = new LiveGame();
-        liveGame.setGameId(gameId.toString());
-        liveGame.setObserverKey(observerKey);
-        liveGame.persist();
+        if (LiveGame.findLiveGamesByGameId(gameId.toString()).getResultList().size() == 0) {
+            LiveGame liveGame = new LiveGame();
+            liveGame.setGameId(gameId.toString());
+            liveGame.setObserverKey(observerKey);
+            liveGame.persist();
+        }
     }
     
     

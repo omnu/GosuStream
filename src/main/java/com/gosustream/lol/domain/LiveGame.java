@@ -2,20 +2,16 @@ package com.gosustream.lol.domain;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.tostring.RooToString;
-
 import javax.validation.constraints.NotNull;
-
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
 import org.springframework.format.annotation.DateTimeFormat;
 
 @RooJavaBean
 @RooToString
-@RooJpaActiveRecord(finders = { "findLiveGamesByBroadcast" })
+@RooJpaActiveRecord(finders = { "findLiveGamesByBroadcast", "findLiveGamesByGameId" })
 public class LiveGame {
 
     /**
@@ -45,4 +41,8 @@ public class LiveGame {
      */
     @NotNull
     private Boolean broadcast = false;
+    
+    public void prioritize() {
+        
+    }
 }

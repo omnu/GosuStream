@@ -17,4 +17,12 @@ privileged aspect LiveGame_Roo_Finder {
         return q;
     }
     
+    public static TypedQuery<LiveGame> LiveGame.findLiveGamesByGameId(String gameId) {
+        if (gameId == null || gameId.length() == 0) throw new IllegalArgumentException("The gameId argument is required");
+        EntityManager em = LiveGame.entityManager();
+        TypedQuery<LiveGame> q = em.createQuery("SELECT o FROM LiveGame AS o WHERE o.gameId = :gameId", LiveGame.class);
+        q.setParameter("gameId", gameId);
+        return q;
+    }
+    
 }
