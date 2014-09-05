@@ -24,15 +24,28 @@ privileged aspect PlayerDataOnDemand_Roo_DataOnDemand {
     
     public Player PlayerDataOnDemand.getNewTransientPlayer(int index) {
         Player obj = new Player();
+        setAccountId(obj, index);
         setAlias(obj, index);
+        setIsGosu(obj, index);
         setPoint(obj, index);
         setRegion(obj, index);
+        setUrlEncodedAlias(obj, index);
         return obj;
+    }
+    
+    public void PlayerDataOnDemand.setAccountId(Player obj, int index) {
+        Long accountId = new Integer(index).longValue();
+        obj.setAccountId(accountId);
     }
     
     public void PlayerDataOnDemand.setAlias(Player obj, int index) {
         String alias = "alias_" + index;
         obj.setAlias(alias);
+    }
+    
+    public void PlayerDataOnDemand.setIsGosu(Player obj, int index) {
+        Boolean isGosu = false;
+        obj.setIsGosu(isGosu);
     }
     
     public void PlayerDataOnDemand.setPoint(Player obj, int index) {
@@ -46,6 +59,11 @@ privileged aspect PlayerDataOnDemand_Roo_DataOnDemand {
     public void PlayerDataOnDemand.setRegion(Player obj, int index) {
         String region = "region_" + index;
         obj.setRegion(region);
+    }
+    
+    public void PlayerDataOnDemand.setUrlEncodedAlias(Player obj, int index) {
+        String urlEncodedAlias = "urlEncodedAlias_" + index;
+        obj.setUrlEncodedAlias(urlEncodedAlias);
     }
     
     public Player PlayerDataOnDemand.getSpecificPlayer(int index) {

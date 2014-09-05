@@ -66,7 +66,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Player, String> ApplicationConversionServiceFactoryBean.getPlayerToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.gosustream.lol.domain.Player, java.lang.String>() {
             public String convert(Player player) {
-                return new StringBuilder().append(player.getAlias()).append(' ').append(player.getRegion()).append(' ').append(player.getPoint()).toString();
+                return new StringBuilder().append(player.getAlias()).append(' ').append(player.getUrlEncodedAlias()).append(' ').append(player.getAccountId()).append(' ').append(player.getRegion()).toString();
             }
         };
     }

@@ -6,5 +6,8 @@
         <field:display field="alias" id="s_com_gosustream_lol_domain_Player_alias" object="${player}" z="gyDbcIskHzhmYc2g7aDPkgztPaQ="/>
         <field:display field="region" id="s_com_gosustream_lol_domain_Player_region" object="${player}" z="mSA1wtsN6xTEflvPcLAWbO+lrbM="/>
         <field:display field="point" id="s_com_gosustream_lol_domain_Player_point" object="${player}" z="9JeRJA9bj1f6X02zx9tkw4Awu6Q="/>
+        <field:display field="urlEncodedAlias" id="s_com_gosustream_lol_domain_Player_urlEncodedAlias" object="${player}" z="LFWZSgm5shWwn/L2SyFI3JS2LWE="/>
+        <field:display field="accountId" id="s_com_gosustream_lol_domain_Player_accountId" object="${player}" z="khBmQIr5pDEQ17T80UZm7fUNZyI="/>
+        <field:display field="isGosu" id="s_com_gosustream_lol_domain_Player_isGosu" object="${player}" z="MNJ3QgVaBrhQcdn0e30DcEmhF4g="/>
     </page:show>
 </div>

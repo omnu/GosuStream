@@ -6,6 +6,9 @@
         <field:input field="alias" id="c_com_gosustream_lol_domain_Player_alias" required="true" z="Fqf0JVnSUq/VzWAaqKQiz1OCwC8="/>
         <field:input field="region" id="c_com_gosustream_lol_domain_Player_region" required="true" z="dDZUiotlkk0VhbK2TcTYHCfySig="/>
         <field:input field="point" id="c_com_gosustream_lol_domain_Player_point" min="0" required="true" z="9g99bCOBnOFP5DJZvajmJ5riwhQ="/>
+        <field:input field="urlEncodedAlias" id="c_com_gosustream_lol_domain_Player_urlEncodedAlias" required="true" z="E4BnbCORWV+zC1EqJRJ7/CteORk="/>
+        <field:input field="accountId" id="c_com_gosustream_lol_domain_Player_accountId" required="true" z="VY6nEp6r5v2NWE1BGym3RCRywI4="/>
+        <field:checkbox field="isGosu" id="c_com_gosustream_lol_domain_Player_isGosu" z="45361H9BX9DRE31CPjthnjarDfo="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_gosustream_lol_domain_Player" render="${not empty dependencies}" z="yxg0D6qCqWgxK44D9nUB+UtuOxw="/>
 </div>

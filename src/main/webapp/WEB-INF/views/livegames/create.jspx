@@ -6,7 +6,7 @@
         <field:input field="gameId" id="c_com_gosustream_lol_domain_LiveGame_gameId" required="true" z="z50SbWDTVAtQsRup66uhVJFwBqg="/>
         <field:input field="observerKey" id="c_com_gosustream_lol_domain_LiveGame_observerKey" required="true" z="1rlb74u3Er4AROb7fplWg8nMCxU="/>
         <field:datetime dateTimePattern="${liveGame_starttime_date_format}" field="startTime" id="c_com_gosustream_lol_domain_LiveGame_startTime" required="true" z="Xj8v3bV4RwgpED54Go+txiDydbI="/>
-        <field:input field="priority" id="c_com_gosustream_lol_domain_LiveGame_priority" z="SaA1k4/eFFFMZblyXPbYdlHLrrI="/>
+        <field:input field="priority" id="c_com_gosustream_lol_domain_LiveGame_priority" required="true" z="okLpphY4pQDDwhXp5tw8bJHWaz0="/>
         <field:checkbox field="broadcast" id="c_com_gosustream_lol_domain_LiveGame_broadcast" z="amXmHEsp47QMFazCTSQM9kX9K9c="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_gosustream_lol_domain_LiveGame" render="${not empty dependencies}" z="3+hm4ljy7tg+SLqKnClnYcJ+zrU="/>

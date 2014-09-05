@@ -1,13 +1,17 @@
 package com.gosustream.lol.domain;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.EntityManager;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.TypedQuery;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.tostring.RooToString;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @RooJavaBean
 @RooToString
@@ -44,5 +48,13 @@ public class LiveGame {
     
     public void prioritize() {
         
+    }
+    
+    public static TypedQuery<LiveGame> findLiveGameByBroadcastAndOrderByPriority() {
+        EntityManager em = LiveGame.entityManager();
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM LiveGame AS o WHERE o.broadcast = FALSE ORDER BY o.priority DESC");
+        TypedQuery<LiveGame> q = em.createQuery(queryBuilder.toString(), LiveGame.class);
+        q.setMaxResults(1);
+        return q;
     }
 }

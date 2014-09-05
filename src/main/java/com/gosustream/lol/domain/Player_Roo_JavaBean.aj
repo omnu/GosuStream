@@ -15,6 +15,22 @@ privileged aspect Player_Roo_JavaBean {
         this.alias = alias;
     }
     
+    public String Player.getUrlEncodedAlias() {
+        return this.urlEncodedAlias;
+    }
+    
+    public void Player.setUrlEncodedAlias(String urlEncodedAlias) {
+        this.urlEncodedAlias = urlEncodedAlias;
+    }
+    
+    public long Player.getAccountId() {
+        return this.accountId;
+    }
+    
+    public void Player.setAccountId(long accountId) {
+        this.accountId = accountId;
+    }
+    
     public String Player.getRegion() {
         return this.region;
     }
@@ -29,6 +45,14 @@ privileged aspect Player_Roo_JavaBean {
     
     public void Player.setPoint(int point) {
         this.point = point;
+    }
+    
+    public Boolean Player.getIsGosu() {
+        return this.isGosu;
+    }
+    
+    public void Player.setIsGosu(Boolean isGosu) {
+        this.isGosu = isGosu;
     }
     
 }
