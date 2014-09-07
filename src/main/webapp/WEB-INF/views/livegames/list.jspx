@@ -9,6 +9,7 @@
             <table:column date="true" dateTimePattern="${liveGame_starttime_date_format}" id="c_com_gosustream_lol_domain_LiveGame_startTime" property="startTime" z="FDKgzeNugOs1ITzwRTFsoRgtCCI="/>
             <table:column id="c_com_gosustream_lol_domain_LiveGame_priority" property="priority" z="sSSY6W8aXClDjcuWc68ZvbIDD0Q="/>
             <table:column id="c_com_gosustream_lol_domain_LiveGame_broadcast" property="broadcast" z="J3Kp5R88NYquUc89heGfc43hT1g="/>
+            <table:column id="c_com_gosustream_lol_domain_LiveGame_streamId" property="streamId" z="wzL9MD/tRjXscHd63R20+6xtRbA="/>
         </table:table>
     </page:list>
 </div>

@@ -3,6 +3,7 @@
 
 package com.gosustream.lol.web;
 
+import com.gosustream.lol.domain.LiveGame;
 import com.gosustream.lol.domain.Player;
 import com.gosustream.lol.web.PlayerController;
 import java.io.UnsupportedEncodingException;
@@ -86,6 +87,7 @@ privileged aspect PlayerController_Roo_Controller {
     
     void PlayerController.populateEditForm(Model uiModel, Player player) {
         uiModel.addAttribute("player", player);
+        uiModel.addAttribute("livegames", LiveGame.findAllLiveGames());
     }
     
     String PlayerController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {

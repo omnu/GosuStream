@@ -4,7 +4,9 @@
 package com.gosustream.lol.domain;
 
 import com.gosustream.lol.domain.LiveGame;
+import com.gosustream.lol.domain.Player;
 import java.util.Date;
+import java.util.Set;
 
 privileged aspect LiveGame_Roo_JavaBean {
     
@@ -46,6 +48,22 @@ privileged aspect LiveGame_Roo_JavaBean {
     
     public void LiveGame.setBroadcast(Boolean broadcast) {
         this.broadcast = broadcast;
+    }
+    
+    public String LiveGame.getStreamId() {
+        return this.streamId;
+    }
+    
+    public void LiveGame.setStreamId(String streamId) {
+        this.streamId = streamId;
+    }
+    
+    public Set<Player> LiveGame.getPlayers() {
+        return this.players;
+    }
+    
+    public void LiveGame.setPlayers(Set<Player> players) {
+        this.players = players;
     }
     
 }

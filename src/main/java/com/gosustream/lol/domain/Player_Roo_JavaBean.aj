@@ -3,6 +3,7 @@
 
 package com.gosustream.lol.domain;
 
+import com.gosustream.lol.domain.LiveGame;
 import com.gosustream.lol.domain.Player;
 
 privileged aspect Player_Roo_JavaBean {
@@ -37,6 +38,14 @@ privileged aspect Player_Roo_JavaBean {
     
     public void Player.setRegion(String region) {
         this.region = region;
+    }
+    
+    public LiveGame Player.getLiveGame() {
+        return this.liveGame;
+    }
+    
+    public void Player.setLiveGame(LiveGame liveGame) {
+        this.liveGame = liveGame;
     }
     
     public int Player.getPoint() {

@@ -31,6 +31,7 @@ privileged aspect GameDataOnDemand_Roo_DataOnDemand {
         setGameId(obj, index);
         setPriority(obj, index);
         setStartTime(obj, index);
+        setStreamId(obj, index);
         return obj;
     }
     
@@ -52,6 +53,11 @@ privileged aspect GameDataOnDemand_Roo_DataOnDemand {
     public void GameDataOnDemand.setStartTime(Game obj, int index) {
         Date startTime = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setStartTime(startTime);
+    }
+    
+    public void GameDataOnDemand.setStreamId(Game obj, int index) {
+        String streamId = "streamId_" + index;
+        obj.setStreamId(streamId);
     }
     
     public Game GameDataOnDemand.getSpecificGame(int index) {

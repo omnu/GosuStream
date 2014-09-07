@@ -8,6 +8,7 @@
             <table:column date="true" dateTimePattern="${game_starttime_date_format}" id="c_com_gosustream_lol_domain_Game_startTime" property="startTime" z="pNMEUoSXFbwZxZysrfwqYuNwdgA="/>
             <table:column date="true" dateTimePattern="${game_endtime_date_format}" id="c_com_gosustream_lol_domain_Game_endTime" property="endTime" z="IgiO9GPc6ZYwkuvZW2mLXFYV5pw="/>
             <table:column id="c_com_gosustream_lol_domain_Game_priority" property="priority" z="aKwr+HrUoaebt0GY+MmVue5CG1o="/>
+            <table:column id="c_com_gosustream_lol_domain_Game_streamId" property="streamId" z="yYZuu4STPJJ9D/c6d2Tr/+U4jqI="/>
         </table:table>
     </page:list>
 </div>

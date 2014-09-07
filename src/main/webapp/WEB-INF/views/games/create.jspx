@@ -7,6 +7,7 @@
         <field:datetime dateTimePattern="${game_starttime_date_format}" field="startTime" id="c_com_gosustream_lol_domain_Game_startTime" required="true" z="sfLFVWGbehkbd5bj1TCFj4CFPHk="/>
         <field:datetime dateTimePattern="${game_endtime_date_format}" field="endTime" id="c_com_gosustream_lol_domain_Game_endTime" required="true" z="xaCU8jvrfoxe/ewjsVoYJgFYFkA="/>
         <field:input field="priority" id="c_com_gosustream_lol_domain_Game_priority" z="UsgWT1fXFVK+UiW6gAIaci1S7uk="/>
+        <field:input field="streamId" id="c_com_gosustream_lol_domain_Game_streamId" z="5OAixn7HovWejHXuPDE1LTcfhfE="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_gosustream_lol_domain_Game" render="${not empty dependencies}" z="tlkwdDNJDk8NME7FD2uukZbeOzI="/>
 </div>

@@ -3,6 +3,7 @@
 
 package com.gosustream.lol.domain;
 
+import com.gosustream.lol.domain.LiveGameDataOnDemand;
 import com.gosustream.lol.domain.Player;
 import com.gosustream.lol.domain.PlayerDataOnDemand;
 import java.security.SecureRandom;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 privileged aspect PlayerDataOnDemand_Roo_DataOnDemand {
@@ -21,6 +23,9 @@ privileged aspect PlayerDataOnDemand_Roo_DataOnDemand {
     private Random PlayerDataOnDemand.rnd = new SecureRandom();
     
     private List<Player> PlayerDataOnDemand.data;
+    
+    @Autowired
+    LiveGameDataOnDemand PlayerDataOnDemand.liveGameDataOnDemand;
     
     public Player PlayerDataOnDemand.getNewTransientPlayer(int index) {
         Player obj = new Player();

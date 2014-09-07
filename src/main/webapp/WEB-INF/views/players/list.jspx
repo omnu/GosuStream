@@ -9,7 +9,7 @@
             <table:column id="c_com_gosustream_lol_domain_Player_point" property="point" z="nc2R/8LH/Mu1oCdk3HwtsjrA3OU="/>
             <table:column id="c_com_gosustream_lol_domain_Player_urlEncodedAlias" property="urlEncodedAlias" z="CryM4/x/Z7H56iSejb/uK6Bt3P8="/>
             <table:column id="c_com_gosustream_lol_domain_Player_accountId" property="accountId" z="JvQ6/ePNcVMd7ZG14T3IEejGnto="/>
-            <table:column id="c_com_gosustream_lol_domain_Player_isGosu" property="isGosu" z="1GnrQXAfD06q/T00kZOv44wVpXo="/>
+            <table:column id="c_com_gosustream_lol_domain_Player_liveGame" property="liveGame" z="nreNOm1FHki7zlNNiNjb7X0mnZg="/>
         </table:table>
     </page:list>
 </div>

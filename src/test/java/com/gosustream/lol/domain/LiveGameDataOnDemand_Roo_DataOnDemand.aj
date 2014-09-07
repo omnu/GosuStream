@@ -32,6 +32,7 @@ privileged aspect LiveGameDataOnDemand_Roo_DataOnDemand {
         setObserverKey(obj, index);
         setPriority(obj, index);
         setStartTime(obj, index);
+        setStreamId(obj, index);
         return obj;
     }
     
@@ -58,6 +59,11 @@ privileged aspect LiveGameDataOnDemand_Roo_DataOnDemand {
     public void LiveGameDataOnDemand.setStartTime(LiveGame obj, int index) {
         Date startTime = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setStartTime(startTime);
+    }
+    
+    public void LiveGameDataOnDemand.setStreamId(LiveGame obj, int index) {
+        String streamId = "streamId_" + index;
+        obj.setStreamId(streamId);
     }
     
     public LiveGame LiveGameDataOnDemand.getSpecificLiveGame(int index) {

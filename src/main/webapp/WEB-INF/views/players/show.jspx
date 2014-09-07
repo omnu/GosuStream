@@ -9,5 +9,6 @@
         <field:display field="urlEncodedAlias" id="s_com_gosustream_lol_domain_Player_urlEncodedAlias" object="${player}" z="LFWZSgm5shWwn/L2SyFI3JS2LWE="/>
         <field:display field="accountId" id="s_com_gosustream_lol_domain_Player_accountId" object="${player}" z="khBmQIr5pDEQ17T80UZm7fUNZyI="/>
         <field:display field="isGosu" id="s_com_gosustream_lol_domain_Player_isGosu" object="${player}" z="MNJ3QgVaBrhQcdn0e30DcEmhF4g="/>
+        <field:display field="liveGame" id="s_com_gosustream_lol_domain_Player_liveGame" object="${player}" z="/yONcuYvtqzbP2hXJHFTImLS2Qc="/>
     </page:show>
 </div>

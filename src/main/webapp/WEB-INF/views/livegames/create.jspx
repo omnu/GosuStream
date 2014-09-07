@@ -8,6 +8,8 @@
         <field:datetime dateTimePattern="${liveGame_starttime_date_format}" field="startTime" id="c_com_gosustream_lol_domain_LiveGame_startTime" required="true" z="Xj8v3bV4RwgpED54Go+txiDydbI="/>
         <field:input field="priority" id="c_com_gosustream_lol_domain_LiveGame_priority" required="true" z="okLpphY4pQDDwhXp5tw8bJHWaz0="/>
         <field:checkbox field="broadcast" id="c_com_gosustream_lol_domain_LiveGame_broadcast" z="amXmHEsp47QMFazCTSQM9kX9K9c="/>
+        <field:simple field="players" id="c_com_gosustream_lol_domain_LiveGame_players" messageCode="entity_reference_not_managed" messageCodeAttribute="Player" z="u9qZvtg5SKdrmjHiHKRxwmZPICk="/>
+        <field:input field="streamId" id="c_com_gosustream_lol_domain_LiveGame_streamId" z="hJst8RfJv9JtZMofhgs+tz/Tg9Q="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_gosustream_lol_domain_LiveGame" render="${not empty dependencies}" z="3+hm4ljy7tg+SLqKnClnYcJ+zrU="/>
 </div>

@@ -7,5 +7,6 @@
         <field:display date="true" dateTimePattern="${game_starttime_date_format}" field="startTime" id="s_com_gosustream_lol_domain_Game_startTime" object="${game}" z="emDKI6zQjg7CjKY5aKxZeWMzpAU="/>
         <field:display date="true" dateTimePattern="${game_endtime_date_format}" field="endTime" id="s_com_gosustream_lol_domain_Game_endTime" object="${game}" z="8NxOt3X+yjdSoSTGJ3xgrXVbDFM="/>
         <field:display field="priority" id="s_com_gosustream_lol_domain_Game_priority" object="${game}" z="8GBl9xVW991zVPEY8YJzcGpJqr8="/>
+        <field:display field="streamId" id="s_com_gosustream_lol_domain_Game_streamId" object="${game}" z="LFFnmvpN4UMcRGbR/B2okyw2HOY="/>
     </page:show>
 </div>

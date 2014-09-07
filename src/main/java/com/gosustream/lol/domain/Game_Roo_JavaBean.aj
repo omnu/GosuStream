@@ -32,6 +32,14 @@ privileged aspect Game_Roo_JavaBean {
         this.endTime = endTime;
     }
     
+    public String Game.getStreamId() {
+        return this.streamId;
+    }
+    
+    public void Game.setStreamId(String streamId) {
+        this.streamId = streamId;
+    }
+    
     public int Game.getPriority() {
         return this.priority;
     }

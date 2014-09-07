@@ -3,6 +3,7 @@ package com.gosustream.lol.web;
 import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,8 +15,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import util.LiveGameInfo;
 
 import com.gosustream.lol.domain.LiveGame;
 import com.gosustream.lol.domain.LiveGameJson;
@@ -24,6 +28,7 @@ import com.gosustream.lol.domain.Region;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 @RequestMapping("/livegames")
 @Controller
@@ -36,49 +41,32 @@ public class LiveGameController {
     @RequestMapping(value = "update/{region}/{alias}")
     public void checkGosuLiveGame(@PathVariable("region") String region,
             @PathVariable("alias") String alias) throws Exception {
-        if (Region.valueOf(region) == null) {
-            // Invalid region
-            throw new Exception();
+        LiveGameInfo liveGameInfo = getLiveGameData(alias, region);
+        if (liveGameInfo != null) {
+            persistLiveGame(liveGameInfo.getGameId(), liveGameInfo.getObserverKey());
         }
-
-        // These code snippets use an open-source library.
-        // http://unirest.io/java
-        HttpResponse<JsonNode> response = Unirest
-                .get("https://community-league-of-legends.p.mashape.com/api/v1.0/" + region
-                        + "/summoner/retrieveInProgressSpectatorGameInfo/" + alias)
-                .header("X-Mashape-Key", "vZltgavJCxmshMmz2evwZblTuuDep1AA7FijsneomYUZASc9Uu").asJson();
-        JSONObject result = response.getBody().getObject();
-        JSONObject playerCredentials = result.getJSONObject("playerCredentials");
-        Long gameId = playerCredentials.getLong("gameId");
-        String observerKey = playerCredentials.getString("observerEncryptionKey");
-
-        persistLiveGame(gameId.toString(), observerKey);
     }
 
     @ResponseStatus(value = HttpStatus.OK)
-    @RequestMapping(value = "update")
-    public void checkGosuLiveGame() throws Exception {
+    @RequestMapping(value = "add")
+    public void addGosuLiveGames() throws Exception {
         List<Player> gosuList = Player.findAllPlayers();
         for (Player gosu : gosuList) {
             String alias = gosu.getUrlEncodedAlias();
             String region = gosu.getRegion().toUpperCase();
-            HttpResponse<JsonNode> response = Unirest
-                    .get("https://community-league-of-legends.p.mashape.com/api/v1.0/" + region
-                            + "/summoner/retrieveInProgressSpectatorGameInfo/" + alias)
-                    .header("X-Mashape-Key", "vZltgavJCxmshMmz2evwZblTuuDep1AA7FijsneomYUZASc9Uu").asJson();
-            JSONObject result = response.getBody().getObject();
-            try {
-                JSONObject playerCredentials = result.getJSONObject("playerCredentials");
-                Long gameId = playerCredentials.getLong("gameId");
-                String observerKey = playerCredentials.getString("observerEncryptionKey");
-                persistLiveGame(gameId.toString(), observerKey);
-            } catch (JSONException e) {
-                log.info("Player " + gosu.getAlias() + " from region " + gosu.getRegion() + " is not in an active game!");
+
+            LiveGameInfo liveGameInfo = getLiveGameData(alias, region);
+            if (liveGameInfo != null) {
+                persistLiveGame(liveGameInfo.getGameId(), liveGameInfo.getObserverKey());
             }
         }
-        // These code snippets use an open-source library.
-        // http://unirest.io/java
+    }
 
+    @ResponseStatus(value = HttpStatus.OK)
+    @RequestMapping(value = "removeInactiveGames")
+    public void removeInactiveLiveGames() throws Exception {
+        removeInactiveGames(LiveGame.findAllLiveGames());
+        
     }
 
     @RequestMapping(value = "json", method = RequestMethod.GET, produces = "application/json")
@@ -89,13 +77,52 @@ public class LiveGameController {
     }
 
     @RequestMapping(value = "getNextLiveGame", method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody LiveGameJson getNextLiveGame() {
-        LiveGame liveGame = LiveGame.findLiveGameOrderByPriority().getSingleResult();
-        liveGame.setBroadcast(true);
-        liveGame.merge();
+    public @ResponseBody
+    LiveGameJson getNextLiveGame(@RequestParam(value = "streamId", required = false) String streamId) throws UnirestException {
+        LiveGame liveGame = null;
+        if (streamId == null) {
+            List<LiveGame> liveGames = LiveGame.findLiveGameByBroadcastAndOrderByPriority(false).getResultList();
+            if (liveGames.isEmpty()) {
+                return null;
+            } else {
+                liveGame = liveGames.get(0);
+            }
+        } else {
+            List<LiveGame> streamingGames = LiveGame.findLiveGamesByStreamId(streamId).getResultList();
+            if (streamingGames.isEmpty()) {
+                List<LiveGame> liveGames = LiveGame.findLiveGameByBroadcastAndOrderByPriority(false).getResultList();
+                if (liveGames.isEmpty()) {
+                    return null;
+                } else {
+                    liveGame = liveGames.get(0);
+                    liveGame.setBroadcast(true);
+                    liveGame.setStreamId(streamId);
+                    liveGame.merge();
+                }
+            } else {
+                removeInactiveGames(streamingGames);
+            }
+        }
+        if (liveGame == null) {
+            return null;
+        }
         return LiveGameJson.liveGameToJson(liveGame);
     }
 
+    private void removeInactiveGames(List<LiveGame> liveGames) throws UnirestException {
+        for(LiveGame liveGame : liveGames) {
+            Set<Player> players = liveGame.getPlayers();
+            Player gosu = players.iterator().next();
+            String alias = gosu.getUrlEncodedAlias();
+            String region = gosu.getRegion().toUpperCase();
+            LiveGameInfo liveGameInfo = getLiveGameData(alias, region);
+            if (liveGameInfo == null || !liveGameInfo.getGameId().equals(liveGame.getGameId())) {
+                // remove finished game
+                liveGame.remove();
+            }
+        }
+    }
+    
     /**
      * Check if current game already exists inside live games table and persist
      * if not
@@ -111,6 +138,26 @@ public class LiveGameController {
             liveGame.setGameId(gameId.toString());
             liveGame.setObserverKey(observerKey);
             liveGame.persist();
+        }
+    }
+
+    private LiveGameInfo getLiveGameData(String alias, String region) throws UnirestException {
+        HttpResponse<JsonNode> response = Unirest
+                .get("https://community-league-of-legends.p.mashape.com/api/v1.0/" + region
+                        + "/summoner/retrieveInProgressSpectatorGameInfo/" + alias)
+                .header("X-Mashape-Key", "vZltgavJCxmshMmz2evwZblTuuDep1AA7FijsneomYUZASc9Uu").asJson();
+        JSONObject result = response.getBody().getObject();
+        try {
+            JSONObject playerCredentials = result.getJSONObject("playerCredentials");
+            Long gameId = playerCredentials.getLong("gameId");
+            String observerKey = playerCredentials.getString("observerEncryptionKey");
+            LiveGameInfo gameInfo = new LiveGameInfo();
+            gameInfo.setGameId(gameId.toString());
+            gameInfo.setObserverKey(observerKey);
+            return gameInfo;
+        } catch (JSONException e) {
+            log.info("Player " + alias + " from region " + region + " is not in an active game!");
+            return null;
         }
     }
 }
