@@ -9,5 +9,6 @@
         <field:display field="priority" id="s_com_gosustream_lol_domain_LiveGame_priority" object="${livegame}" z="TETX1WxCmexmxrY3ucnqxr5Vlvo="/>
         <field:display field="broadcast" id="s_com_gosustream_lol_domain_LiveGame_broadcast" object="${livegame}" z="V33ebk+7rd5lTHOsMH7vXWG75+o="/>
         <field:display field="streamId" id="s_com_gosustream_lol_domain_LiveGame_streamId" object="${livegame}" z="unvhrbMNtzuE398gwOmzk2MYbe4="/>
+        <field:display field="region" id="s_com_gosustream_lol_domain_LiveGame_region" object="${livegame}" z="qK+rIp5I1FDy1E5xeOqjGlB4qDA="/>
     </page:show>
 </div>

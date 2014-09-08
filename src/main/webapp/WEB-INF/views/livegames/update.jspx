@@ -10,5 +10,6 @@
         <field:checkbox field="broadcast" id="c_com_gosustream_lol_domain_LiveGame_broadcast" z="amXmHEsp47QMFazCTSQM9kX9K9c="/>
         <field:simple field="players" id="c_com_gosustream_lol_domain_LiveGame_players" messageCode="entity_reference_not_managed" messageCodeAttribute="Player" z="u9qZvtg5SKdrmjHiHKRxwmZPICk="/>
         <field:input field="streamId" id="c_com_gosustream_lol_domain_LiveGame_streamId" z="hJst8RfJv9JtZMofhgs+tz/Tg9Q="/>
+        <field:input field="region" id="c_com_gosustream_lol_domain_LiveGame_region" required="true" z="OcfQvuJdHEKSZajYrvweaHdPmwY="/>
     </form:update>
 </div>

@@ -53,6 +53,11 @@ public class LiveGame {
 
     /**
      */
+    @NotNull
+    private String region;
+
+    /**
+     */
     private String streamId;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "liveGame")

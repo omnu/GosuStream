@@ -50,6 +50,14 @@ privileged aspect LiveGame_Roo_JavaBean {
         this.broadcast = broadcast;
     }
     
+    public String LiveGame.getRegion() {
+        return this.region;
+    }
+    
+    public void LiveGame.setRegion(String region) {
+        this.region = region;
+    }
+    
     public String LiveGame.getStreamId() {
         return this.streamId;
     }

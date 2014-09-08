@@ -31,6 +31,7 @@ privileged aspect LiveGameDataOnDemand_Roo_DataOnDemand {
         setGameId(obj, index);
         setObserverKey(obj, index);
         setPriority(obj, index);
+        setRegion(obj, index);
         setStartTime(obj, index);
         setStreamId(obj, index);
         return obj;
@@ -54,6 +55,11 @@ privileged aspect LiveGameDataOnDemand_Roo_DataOnDemand {
     public void LiveGameDataOnDemand.setPriority(LiveGame obj, int index) {
         int priority = 0;
         obj.setPriority(priority);
+    }
+    
+    public void LiveGameDataOnDemand.setRegion(LiveGame obj, int index) {
+        String region = "region_" + index;
+        obj.setRegion(region);
     }
     
     public void LiveGameDataOnDemand.setStartTime(LiveGame obj, int index) {

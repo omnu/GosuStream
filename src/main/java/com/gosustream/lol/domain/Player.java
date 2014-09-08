@@ -24,6 +24,8 @@ public class Player {
     @NotNull
     private String urlEncodedAlias;
 
+    /**
+     */
     @NotNull
     private long accountId;
 
