@@ -1,10 +1,11 @@
 package com.gosustream.lol.web;
 
-import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -21,14 +22,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import util.LiveGameInfo;
 
+import com.gosustream.lol.domain.Constants;
 import com.gosustream.lol.domain.LiveGame;
 import com.gosustream.lol.domain.LiveGameJson;
 import com.gosustream.lol.domain.Player;
-import com.gosustream.lol.domain.Region;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 
 @RequestMapping("/livegames")
 @Controller
@@ -38,35 +38,44 @@ public class LiveGameController {
     private static final Logger log = LoggerFactory.getLogger(LiveGameController.class);
 
     @ResponseStatus(value = HttpStatus.OK)
-    @RequestMapping(value = "update/{region}/{alias}")
-    public void checkGosuLiveGame(@PathVariable("region") String region,
+    @RequestMapping(value = "add/{region}/{alias}", produces = "application/json")
+    public LiveGame checkGosuLiveGame(@PathVariable("region") String region,
             @PathVariable("alias") String alias) throws Exception {
         LiveGameInfo liveGameInfo = getLiveGameData(alias, region);
+        LiveGame result = new LiveGame();
         if (liveGameInfo != null) {
-            persistLiveGame(liveGameInfo.getGameId(), liveGameInfo.getObserverKey());
+            result = persistLiveGame(liveGameInfo);
         }
+        return result;
     }
 
     @ResponseStatus(value = HttpStatus.OK)
-    @RequestMapping(value = "add")
-    public void addGosuLiveGames() throws Exception {
-        List<Player> gosuList = Player.findAllPlayers();
+    @RequestMapping(value = "add", produces = "application/json")
+    public List<LiveGame> addGosuLiveGames(@RequestParam(value = "region", required = false) String region)
+            throws Exception {
+        List<LiveGame> result = new ArrayList<LiveGame>();
+        List<Player> gosuList;
+        if (region == null) {
+            gosuList = Player.findPlayersByIsGosu(true).getResultList();
+        } else {
+            gosuList = Player.findPlayersByIsGosuAndRegion(true, region).getResultList();
+        }
         for (Player gosu : gosuList) {
             String alias = gosu.getUrlEncodedAlias();
-            String region = gosu.getRegion().toUpperCase();
+            String gosuRegion = gosu.getRegion().toUpperCase();
 
-            LiveGameInfo liveGameInfo = getLiveGameData(alias, region);
+            LiveGameInfo liveGameInfo = getLiveGameData(alias, gosuRegion);
             if (liveGameInfo != null) {
-                persistLiveGame(liveGameInfo.getGameId(), liveGameInfo.getObserverKey());
+                result.add(persistLiveGame(liveGameInfo));
             }
         }
     }
 
     @ResponseStatus(value = HttpStatus.OK)
-    @RequestMapping(value = "removeInactiveGames")
+    @RequestMapping(value = "removeInactiveLiveGames")
     public void removeInactiveLiveGames() throws Exception {
         removeInactiveGames(LiveGame.findAllLiveGames());
-        
+
     }
 
     @RequestMapping(value = "json", method = RequestMethod.GET, produces = "application/json")
@@ -78,10 +87,12 @@ public class LiveGameController {
 
     @RequestMapping(value = "getNextLiveGame", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
-    LiveGameJson getNextLiveGame(@RequestParam(value = "streamId", required = false) String streamId) throws UnirestException {
+    LiveGameJson getNextLiveGame(@RequestParam(value = "streamId", required = false) String streamId,
+            @RequestParam(value = "region", required = false) String region) throws Exception {
         LiveGame liveGame = null;
         if (streamId == null) {
-            List<LiveGame> liveGames = LiveGame.findLiveGameByBroadcastAndOrderByPriority(false).getResultList();
+            List<LiveGame> liveGames = LiveGame.findLiveGameByBroadcastAndRegionAndOrderByPriority(false, region)
+                    .getResultList();
             if (liveGames.isEmpty()) {
                 return null;
             } else {
@@ -90,7 +101,8 @@ public class LiveGameController {
         } else {
             List<LiveGame> streamingGames = LiveGame.findLiveGamesByStreamId(streamId).getResultList();
             if (streamingGames.isEmpty()) {
-                List<LiveGame> liveGames = LiveGame.findLiveGameByBroadcastAndOrderByPriority(false).getResultList();
+                List<LiveGame> liveGames = LiveGame.findLiveGameByBroadcastAndRegionAndOrderByPriority(false, region)
+                        .getResultList();
                 if (liveGames.isEmpty()) {
                     return null;
                 } else {
@@ -109,8 +121,8 @@ public class LiveGameController {
         return LiveGameJson.liveGameToJson(liveGame);
     }
 
-    private void removeInactiveGames(List<LiveGame> liveGames) throws UnirestException {
-        for(LiveGame liveGame : liveGames) {
+    private void removeInactiveGames(List<LiveGame> liveGames) throws Exception {
+        for (LiveGame liveGame : liveGames) {
             Set<Player> players = liveGame.getPlayers();
             Player gosu = players.iterator().next();
             String alias = gosu.getUrlEncodedAlias();
@@ -122,7 +134,7 @@ public class LiveGameController {
             }
         }
     }
-    
+
     /**
      * Check if current game already exists inside live games table and persist
      * if not
@@ -132,32 +144,69 @@ public class LiveGameController {
      * @param observerKey
      *            - Observer key to spectate the live game
      */
-    private void persistLiveGame(String gameId, String observerKey) {
+    private LiveGame persistLiveGame(LiveGameInfo liveGameInfo) {
+        String gameId = liveGameInfo.getGameId();
+        String observerKey = liveGameInfo.getObserverKey();
+        LiveGame liveGame = new LiveGame();
         if (LiveGame.findLiveGamesByGameId(gameId.toString()).getResultList().size() == 0) {
-            LiveGame liveGame = new LiveGame();
             liveGame.setGameId(gameId.toString());
             liveGame.setObserverKey(observerKey);
             liveGame.persist();
+
+            for (Player gosu : liveGameInfo.getTeamOne()) {
+                gosu.setLiveGame(liveGame);
+                gosu.merge();
+            }
+
+            for (Player gosu : liveGameInfo.getTeamTwo()) {
+                gosu.setLiveGame(liveGame);
+                gosu.merge();
+            }
         }
+        return liveGame;
     }
 
-    private LiveGameInfo getLiveGameData(String alias, String region) throws UnirestException {
+    private LiveGameInfo getLiveGameData(String alias, String region) throws Exception {
         HttpResponse<JsonNode> response = Unirest
                 .get("https://community-league-of-legends.p.mashape.com/api/v1.0/" + region
                         + "/summoner/retrieveInProgressSpectatorGameInfo/" + alias)
                 .header("X-Mashape-Key", "vZltgavJCxmshMmz2evwZblTuuDep1AA7FijsneomYUZASc9Uu").asJson();
         JSONObject result = response.getBody().getObject();
         try {
-            JSONObject playerCredentials = result.getJSONObject("playerCredentials");
-            Long gameId = playerCredentials.getLong("gameId");
-            String observerKey = playerCredentials.getString("observerEncryptionKey");
-            LiveGameInfo gameInfo = new LiveGameInfo();
-            gameInfo.setGameId(gameId.toString());
-            gameInfo.setObserverKey(observerKey);
-            return gameInfo;
+            // Get live game data as JSON and format decode it into
+            // LiveGameDataInfo
+            JSONObject gameResult = result.getJSONObject("game");
+            JSONArray teamOne = gameResult.getJSONObject("teamOne").getJSONArray("array");
+            JSONArray teamTwo = gameResult.getJSONObject("teamTwo").getJSONArray("array");
+            String gameType = gameResult.getString("queueTypeName");
+
+            if (gameType.equals(Constants.RANKED_QUEUE_TYPE)) {
+                JSONObject playerCredentials = result.getJSONObject("playerCredentials");
+                Long gameId = playerCredentials.getLong("gameId");
+                String observerKey = playerCredentials.getString("observerEncryptionKey");
+                LiveGameInfo gameInfo = new LiveGameInfo();
+                gameInfo.setGameType(gameType);
+                gameInfo.setGameId(gameId.toString());
+                gameInfo.setObserverKey(observerKey);
+                gameInfo.setTeamOne(persistPlayersInTeam(teamOne, region));
+                gameInfo.setTeamTwo(persistPlayersInTeam(teamTwo, region));
+                return gameInfo;
+            } else {
+                return null;
+            }
         } catch (JSONException e) {
             log.info("Player " + alias + " from region " + region + " is not in an active game!");
             return null;
         }
+    }
+
+    private List<Player> persistPlayersInTeam(JSONArray team, String region) throws JSONException, Exception {
+        List<Player> gosuList = new ArrayList<Player>();
+        for (int i = 0; i < team.length(); i++) {
+            JSONObject gosuInfo = team.getJSONObject(i);
+            Long accountId = gosuInfo.getLong("summonerId");
+            gosuList.add(PlayerController.updateGosuInRegionWithAlias(region.toLowerCase(), accountId.toString()));
+        }
+        return gosuList;
     }
 }

@@ -9,6 +9,24 @@ import javax.persistence.TypedQuery;
 
 privileged aspect Player_Roo_Finder {
     
+    public static TypedQuery<Player> Player.findPlayersByIsGosu(Boolean isGosu) {
+        if (isGosu == null) throw new IllegalArgumentException("The isGosu argument is required");
+        EntityManager em = Player.entityManager();
+        TypedQuery<Player> q = em.createQuery("SELECT o FROM Player AS o WHERE o.isGosu = :isGosu", Player.class);
+        q.setParameter("isGosu", isGosu);
+        return q;
+    }
+    
+    public static TypedQuery<Player> Player.findPlayersByIsGosuAndRegion(Boolean isGosu, String region) {
+        if (isGosu == null) throw new IllegalArgumentException("The isGosu argument is required");
+        if (region == null || region.length() == 0) throw new IllegalArgumentException("The region argument is required");
+        EntityManager em = Player.entityManager();
+        TypedQuery<Player> q = em.createQuery("SELECT o FROM Player AS o WHERE o.isGosu = :isGosu AND o.region = :region", Player.class);
+        q.setParameter("isGosu", isGosu);
+        q.setParameter("region", region);
+        return q;
+    }
+    
     public static TypedQuery<Player> Player.findPlayersByRegionAndAlias(String region, String alias) {
         if (region == null || region.length() == 0) throw new IllegalArgumentException("The region argument is required");
         if (alias == null || alias.length() == 0) throw new IllegalArgumentException("The alias argument is required");
