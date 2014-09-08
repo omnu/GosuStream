@@ -69,6 +69,7 @@ public class LiveGameController {
                 result.add(persistLiveGame(liveGameInfo));
             }
         }
+        return result;
     }
 
     @ResponseStatus(value = HttpStatus.OK)

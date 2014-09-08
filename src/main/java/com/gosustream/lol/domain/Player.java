@@ -10,7 +10,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
-@Table(uniqueConstraints = { @javax.persistence.UniqueConstraint({ "alias", "region" }) })
+@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"alias" , "region"})})
 @RooJpaActiveRecord(finders = { "findPlayersByRegionAndAlias", "findPlayersByIsGosuAndRegion", "findPlayersByIsGosu" })
 public class Player {
 
