@@ -317,6 +317,11 @@
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.9.10</version>
         </dependency>
+        <dependency>
+      		<groupId>leaguelib</groupId>  
+       		<artifactId>com.leaguelib</artifactId>  
+       		<version>1.0</version>
+		</dependency>
     </dependencies>
     <build>
         <plugins>
