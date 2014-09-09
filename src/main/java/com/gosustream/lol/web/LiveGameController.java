@@ -137,7 +137,7 @@ public class LiveGameController {
         String gameLink = "";
         Long startTime = Long.MIN_VALUE;
         for (int i = 0; i < summoners.size(); i++) {
-            Element info = summoners.get(0).getElementsByClass("Spectate").first();
+            Element info = summoners.get(i).getElementsByClass("Spectate").first();
             String queueType = info.getElementsByClass("QueueType").first().text();
             if(queueType.equals("Ranked Solo 5v5") || queueType.equals("솔랭 2인")) {
                 Long gameDuration = Long.MIN_VALUE;
