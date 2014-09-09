@@ -152,6 +152,7 @@ public class LiveGameController {
                 }
             }
         }
+         gameLink = gameLink.substring(gameLink.indexOf("id=") + 3);
         return gameLink;
     }
 
