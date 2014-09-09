@@ -152,7 +152,9 @@ public class LiveGameController {
                 }
             }
         }
-         gameLink = gameLink.substring(gameLink.indexOf("id=") + 3);
+        if(!gameLink.isEmpty()) {
+            gameLink = gameLink.substring(gameLink.indexOf("id=") + 3);
+        }
         return gameLink;
     }
 
