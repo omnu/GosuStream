@@ -8,6 +8,10 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -114,12 +118,56 @@ public class LiveGameController {
                 }
             } else {
                 removeInactiveGames(streamingGames);
+                // After removing the stale streamed game grab the next and return
+                
             }
         }
         if (liveGame == null) {
             return null;
         }
         return LiveGameJson.liveGameToJson(liveGame);
+    }
+
+    @RequestMapping(value = "getNextLiveGameOPGG", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    String getNextLiveGameFromOpgg(@RequestParam(value = "streamId", required = false) String streamId,
+            @RequestParam(value = "region", required = false) String region) throws Exception {
+        Document doc = Jsoup.connect(Constants.URL_OPGG).get();
+        Elements summoners = doc.getElementsByClass("SpectatorSummoner");
+        String gameLink = "";
+        Long startTime = Long.MIN_VALUE;
+        for (int i = 0; i < summoners.size(); i++) {
+            Element info = summoners.get(0).getElementsByClass("Spectate").first();
+            String queueType = info.getElementsByClass("QueueType").first().text();
+            if(queueType.equals("Ranked Solo 5v5") || queueType.equals("솔랭 2인")) {
+                Long gameDuration = Long.MIN_VALUE;
+                try {
+                gameDuration = Long.parseLong(info.getElementsByClass("_countdown").first().attr("data-timestamp"));
+                } catch (Exception e) {
+                    continue;
+                }
+                if(startTime < gameDuration) {
+                    startTime = gameDuration;
+                    gameLink = info.getElementsByClass("SpectateButton").first().select("a").attr("href");
+                }
+            }
+        }
+        return gameLink;
+    }
+
+    @RequestMapping(value = "checkLiveGameStatus/{gameId}", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    boolean checkLiveGameStatus(@PathVariable("gameId") String gameId) throws Exception {
+        String region = "kr";
+        try {
+            HttpResponse<JsonNode> response = Unirest
+                    .get("https://" + region + ".api.pvp.net/api/lol/" + region + "/v2.2/match/" + gameId
+                            + "?api_key=" + Constants.RIOT_API_KEY).asJson();
+            response.getBody().getObject();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private List<LiveGame> removeInactiveGames(List<LiveGame> liveGames) throws Exception {
