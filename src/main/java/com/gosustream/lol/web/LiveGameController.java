@@ -37,21 +37,21 @@ public class LiveGameController {
 
     private static final Logger log = LoggerFactory.getLogger(LiveGameController.class);
 
-    @ResponseStatus(value = HttpStatus.OK)
     @RequestMapping(value = "add/{region}/{alias}", produces = "application/json")
-    public LiveGame checkGosuLiveGame(@PathVariable("region") String region,
+    public @ResponseBody
+    LiveGame checkGosuLiveGame(@PathVariable("region") String region,
             @PathVariable("alias") String alias) throws Exception {
         LiveGameInfo liveGameInfo = getLiveGameData(alias, region);
         LiveGame result = new LiveGame();
         if (liveGameInfo != null) {
-            result = persistLiveGame(liveGameInfo);
+            result = persistLiveGame(liveGameInfo, region.toLowerCase());
         }
         return result;
     }
 
-    @ResponseStatus(value = HttpStatus.OK)
     @RequestMapping(value = "add", produces = "application/json")
-    public List<LiveGame> addGosuLiveGames(@RequestParam(value = "region", required = false) String region)
+    public @ResponseBody
+    List<LiveGame> addGosuLiveGames(@RequestParam(value = "region", required = false) String region)
             throws Exception {
         List<LiveGame> result = new ArrayList<LiveGame>();
         List<Player> gosuList;
@@ -66,16 +66,16 @@ public class LiveGameController {
 
             LiveGameInfo liveGameInfo = getLiveGameData(alias, gosuRegion);
             if (liveGameInfo != null) {
-                result.add(persistLiveGame(liveGameInfo));
+                result.add(persistLiveGame(liveGameInfo, gosu.getRegion()));
             }
         }
         return result;
     }
 
-    @ResponseStatus(value = HttpStatus.OK)
     @RequestMapping(value = "removeInactiveLiveGames")
-    public void removeInactiveLiveGames() throws Exception {
-        removeInactiveGames(LiveGame.findAllLiveGames());
+    public @ResponseBody
+    List<LiveGame> removeInactiveLiveGames() throws Exception {
+        return removeInactiveGames(LiveGame.findAllLiveGames());
 
     }
 
@@ -122,7 +122,8 @@ public class LiveGameController {
         return LiveGameJson.liveGameToJson(liveGame);
     }
 
-    private void removeInactiveGames(List<LiveGame> liveGames) throws Exception {
+    private List<LiveGame> removeInactiveGames(List<LiveGame> liveGames) throws Exception {
+        List<LiveGame> result = new ArrayList<LiveGame>();
         for (LiveGame liveGame : liveGames) {
             Set<Player> players = liveGame.getPlayers();
             Player gosu = players.iterator().next();
@@ -132,8 +133,10 @@ public class LiveGameController {
             if (liveGameInfo == null || !liveGameInfo.getGameId().equals(liveGame.getGameId())) {
                 // remove finished game
                 liveGame.remove();
+                result.add(liveGame);
             }
         }
+        return result;
     }
 
     /**
@@ -145,13 +148,14 @@ public class LiveGameController {
      * @param observerKey
      *            - Observer key to spectate the live game
      */
-    private LiveGame persistLiveGame(LiveGameInfo liveGameInfo) {
+    private LiveGame persistLiveGame(LiveGameInfo liveGameInfo, String region) {
         String gameId = liveGameInfo.getGameId();
         String observerKey = liveGameInfo.getObserverKey();
         LiveGame liveGame = new LiveGame();
         if (LiveGame.findLiveGamesByGameId(gameId.toString()).getResultList().size() == 0) {
             liveGame.setGameId(gameId.toString());
             liveGame.setObserverKey(observerKey);
+            liveGame.setRegion(region);
             liveGame.persist();
 
             for (Player gosu : liveGameInfo.getTeamOne()) {
