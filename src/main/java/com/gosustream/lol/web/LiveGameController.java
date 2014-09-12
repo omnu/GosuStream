@@ -2,7 +2,9 @@ package com.gosustream.lol.web;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.json.JSONArray;
@@ -130,14 +132,17 @@ public class LiveGameController {
 
     @RequestMapping(value = "getNextLiveGameOPGG", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
-    String getNextLiveGameFromOpgg(@RequestParam(value = "streamId", required = false) String streamId,
+    Map<String, String> getNextLiveGameFromOpgg(@RequestParam(value = "streamId", required = false) String streamId,
             @RequestParam(value = "region", required = false) String region) throws Exception {
         Document doc = Jsoup.connect(Constants.URL_OPGG).get();
         Elements summoners = doc.getElementsByClass("SpectatorSummoner");
         String gameLink = "";
+        Element gosuSummoner = null;
         Long startTime = Long.MIN_VALUE;
         for (int i = 0; i < summoners.size(); i++) {
-            Element info = summoners.get(i).getElementsByClass("Spectate").first();
+            Element summoner = summoners.get(i);
+            Element info = summoner.getElementsByClass("Spectate").first();
+             
             String queueType = info.getElementsByClass("QueueType").first().text();
             if(queueType.equals("Ranked Solo 5v5") || queueType.equals("솔랭 2인")) {
                 Long gameDuration = Long.MIN_VALUE;
@@ -147,30 +152,41 @@ public class LiveGameController {
                     continue;
                 }
                 if(startTime < gameDuration) {
+                    gosuSummoner = summoner;
                     startTime = gameDuration;
                     gameLink = info.getElementsByClass("SpectateButton").first().select("a").attr("href");
                 }
             }
         }
+        Map<String, String> result = new HashMap<String, String>();
         if(!gameLink.isEmpty()) {
-            gameLink = gameLink.substring(gameLink.indexOf("id=") + 3);
+            result.put("gameLink", gameLink.substring(gameLink.indexOf("id=") + 3));
+            if(gosuSummoner.getElementsByClass("summonerExtra").first() != null)
+                result.put("summonerExtra", gosuSummoner.getElementsByClass("summonerExtra").first().text());
+            result.put("summonerName", gosuSummoner.getElementsByClass("summonerName").first().text());
+            result.put("summonerTeam", gosuSummoner.getElementsByClass("summonerTeam").first().text());
+            result.put("championName", gosuSummoner.getElementsByClass("championName").first().text());
         }
-        return gameLink;
+        return result;
     }
 
     @RequestMapping(value = "checkLiveGameStatus/{gameId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
-    boolean checkLiveGameStatus(@PathVariable("gameId") String gameId) throws Exception {
+    Map<String, String> checkLiveGameStatus(@PathVariable("gameId") String gameId) throws Exception {
         String region = "kr";
+        Map<String, String> resultMap = new HashMap<String, String>();
         try {
             HttpResponse<JsonNode> response = Unirest
                     .get("https://" + region + ".api.pvp.net/api/lol/" + region + "/v2.2/match/" + gameId
                             + "?api_key=" + Constants.RIOT_API_KEY).asJson();
-            response.getBody().getObject();
-            return true;
+            JSONObject result = response.getBody().getObject();
+            resultMap.put("matchCreation", "" + result.getLong("matchCreation"));
+            resultMap.put("matchDuration", "" + result.getLong("matchDuration"));
+            return resultMap;
         } catch (Exception e) {
-            return false;
-        }
+            return null;
+        } //38:39 duration /// 2:35 pst pm
+        
     }
 
     private List<LiveGame> removeInactiveGames(List<LiveGame> liveGames) throws Exception {
